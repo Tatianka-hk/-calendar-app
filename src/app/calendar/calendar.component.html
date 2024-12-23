@@ -1,0 +1,67 @@
+<style>
+  .time-column{
+      height: 60px;
+  }
+ </style>
+ <div class="calendar-container">
+  <mat-toolbar color="primary">
+    <span>My Schedule</span>
+  </mat-toolbar>
+  <div class="calendar-content">
+    <mat-card>
+      <mat-calendar ngSkipHydration (selectedChange)="onSelect($event)"></mat-calendar>
+    </mat-card>
+    <div class="events-list">
+    <div>{{ selectedDate | date: 'fullDate' }}</div>
+    <div *ngIf="selectedDate">
+      <h2>{{ selectedDate | date: 'fullDate' }}</h2>
+    <div class="time-table">
+      <div class="time-column" *ngFor="let hour of hours" style="height: 60px;">
+        <div class="time">{{ hour }}</div>
+        <div class="event-slot" >
+          <div
+            class="event"
+            [style.width.%]="90/getEventsForHour(hour).length "
+           
+            *ngFor="let event of getEventsForHour(hour)"
+            (click)="openEditDialog(event)"
+            cdkDrag
+            (cdkDragEnded)="onDragEnd($event, event)"
+            
+          >
+            {{ event.title }}
+            <button mat-icon-button (click)="deleteEvent(event)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+  <mat-card class="event-form">
+    <mat-card-header>
+      <mat-card-title required>Add Event</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field>
+        <input required matInput [(ngModel)]="newEvent.title" placeholder="Event Title">
+      </mat-form-field>
+      <mat-form-field>
+        <input required matInput [matDatepicker]="picker" placeholder="Event Date" [(ngModel)]="newEvent.date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="time" required placeholder="Event Time" [(ngModel)]="newEvent.time">
+      </mat-form-field>
+    </mat-card-content>
+    <mat-error *ngIf="titleError">{{ titleError }}</mat-error>
+    <mat-error *ngIf="dateError">{{ dateError }}</mat-error>
+    <mat-error *ngIf="timeError">{{ timeError }}</mat-error>
+    <mat-card-actions>
+      <button mat-button color="primary" (click)="addEvent()">Add</button>
+    </mat-card-actions>
+  </mat-card>
+  </div>
+</div>

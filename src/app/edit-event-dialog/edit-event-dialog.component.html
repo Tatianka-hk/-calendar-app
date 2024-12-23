@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Edit Event</h1>
+<div mat-dialog-content>
+  <mat-form-field  *ngIf="dataI">
+    <input required matInput [(ngModel)]="dataI.title" placeholder="Event Title">
+  </mat-form-field>
+  <mat-form-field *ngIf="dataI">
+    <input required matInput [(ngModel)]="dataI.date" [matDatepicker]="picker" placeholder="Event Date">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field *ngIf="dataI">
+    <input required type="time"  matInput [(ngModel)]="dataI.time" placeholder="Event Time">
+  </mat-form-field>
+</div>
+<mat-error *ngIf="titleError">{{ titleError }}</mat-error>
+<mat-error *ngIf="dateError">{{ dateError }}</mat-error>
+<mat-error *ngIf="timeError">{{ timeError }}</mat-error>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button (click)="onSave()">Save</button>
+</div>
